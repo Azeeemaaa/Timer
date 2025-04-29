@@ -120,9 +120,9 @@
     </div>
     <div class="output">
       <p>Время: <span id="timeDisplay" class="value-display">00:00:00</span></p>
-      <p>Стоимость работы: <span id="workCost" class="value-display">0.00</span> руб.</p>
-      <p>Стоимость материалов: <span id="materialsCost" class="value-display">0.00</span> руб.</p>
-      <p><strong>Итого:</strong> <span id="totalCost" class="value-display">0.00</span> руб.</p>
+      <p>Стоимость работы: <span id="workCost" class="value-display">0.00</span> дол.</p>
+      <p>Стоимость материалов: <span id="materialsCost" class="value-display">0.00</span> дод.</p>
+      <p><strong>Итого:</strong> <span id="totalCost" class="value-display">0.00</span> дол.</p>
     </div>
   </div>
   <script src="script.js"></script>
