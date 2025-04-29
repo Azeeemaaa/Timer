@@ -15,149 +15,102 @@ let startTime = 0;
 let storedElapsed = 0;
 let materialsTotal = 0;
 
-let savedRate = localStorage.getItem('hourlyRate');
-let savedMaterials = localStorage.getItem('materialsTotal');
-let savedRunning = localStorage.getItem('timerRunning');
-let savedStart = localStorage.getItem('timerStart');
-let savedElapsed = localStorage.getItem('timerElapsed');
-
-if (savedRate !== null) {
-  rateInput.value = savedRate;
-}
-if (savedMaterials !== null) {
-  materialsTotal = parseFloat(savedMaterials) || 0;
-} else {
-  materialsTotal = 0;
-}
-if (savedElapsed !== null) {
-  storedElapsed = parseInt(savedElapsed) || 0;
-} else {
-  storedElapsed = 0;
+function saveState() {
+  localStorage.setItem('rate', rateInput.value);
+  localStorage.setItem('materialsTotal', materialsTotal);
+  localStorage.setItem('timerRunning', running);
+  localStorage.setItem('startTime', startTime);
+  localStorage.setItem('storedElapsed', storedElapsed);
 }
 
-if (savedRunning === 'true') {
-  running = true;
-} else {
-  running = false;
+function loadState() {
+  rateInput.value = localStorage.getItem('rate') || '';
+  materialsTotal = parseFloat(localStorage.getItem('materialsTotal')) || 0;
+  storedElapsed = parseInt(localStorage.getItem('storedElapsed')) || 0;
+  running = localStorage.getItem('timerRunning') === 'true';
+  startTime = parseInt(localStorage.getItem('startTime')) || 0;
 }
 
-if (running && savedStart) {
-  startTime = parseInt(savedStart);
-  storedElapsed = storedElapsed || 0;
-  timerInterval = setInterval(updateDisplay, 1000);
-  startBtn.disabled = true;
-  stopBtn.disabled = false;
-} else {
-  running = false;
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+  const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+  const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+function updateDisplay() {
+  let currentElapsed = storedElapsed;
+  if (running && startTime) {
+    currentElapsed += Date.now() - startTime;
   }
-  startBtn.disabled = false;
-  stopBtn.disabled = true;
+
+  timeDisplay.textContent = formatTime(currentElapsed);
+  const rate = parseFloat(rateInput.value) || 0;
+  const hoursWorked = currentElapsed / 3600000;
+  const workCost = hoursWorked * rate;
+  workCostDisplay.textContent = workCost.toFixed(2);
+  materialsCostDisplay.textContent = materialsTotal.toFixed(2);
+  totalCostDisplay.textContent = (workCost + materialsTotal).toFixed(2);
 }
 
-updateDisplay();
-
-rateInput.addEventListener('input', () => {
-  localStorage.setItem('hourlyRate', rateInput.value);
-  updateDisplay();
-});
-
-startBtn.addEventListener('click', () => {
+function startTimer() {
   if (!running) {
     running = true;
-    storedElapsed = storedElapsed || 0;
     startTime = Date.now();
-    localStorage.setItem('timerStart', startTime.toString());
-    localStorage.setItem('timerRunning', 'true');
-    localStorage.setItem('timerElapsed', storedElapsed.toString());
+    saveState();
     timerInterval = setInterval(updateDisplay, 1000);
     startBtn.disabled = true;
     stopBtn.disabled = false;
   }
-});
+}
 
-stopBtn.addEventListener('click', () => {
+function stopTimer() {
   if (running) {
     running = false;
     storedElapsed += Date.now() - startTime;
-    localStorage.setItem('timerElapsed', storedElapsed.toString());
-    localStorage.setItem('timerRunning', 'false');
+    startTime = 0;
+    saveState();
     clearInterval(timerInterval);
-    timerInterval = null;
     startBtn.disabled = false;
     stopBtn.disabled = true;
-    updateDisplay();
   }
-});
+}
 
-resetBtn.addEventListener('click', () => {
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
+function resetTimer() {
   running = false;
-  startTime = 0;
   storedElapsed = 0;
+  startTime = 0;
   materialsTotal = 0;
-  localStorage.setItem('timerRunning', 'false');
-  localStorage.setItem('timerElapsed', '0');
-  localStorage.setItem('materialsTotal', '0');
-  localStorage.removeItem('timerStart');
+  localStorage.clear();
+  clearInterval(timerInterval);
+  rateInput.value = '';
   materialInput.value = '';
   startBtn.disabled = false;
   stopBtn.disabled = true;
   updateDisplay();
-});
+}
 
-addMaterialBtn.addEventListener('click', () => {
-  let newCost = parseFloat(materialInput.value);
-  if (!isNaN(newCost) && newCost > 0) {
-    materialsTotal += newCost;
+function addMaterials() {
+  const materialValue = parseFloat(materialInput.value);
+  if (!isNaN(materialValue) && materialValue > 0) {
+    materialsTotal += materialValue;
     materialsTotal = Math.round(materialsTotal * 100) / 100;
-    localStorage.setItem('materialsTotal', materialsTotal.toString());
     materialInput.value = '';
+    saveState();
     updateDisplay();
   }
-});
-
-function formatTime(ms) {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  const hoursStr = hours.toString().padStart(2, '0');
-  const minutesStr = minutes.toString().padStart(2, '0');
-  const secondsStr = seconds.toString().padStart(2, '0');
-  return `${hoursStr}:${minutesStr}:${secondsStr}`;
 }
 
-function updateDisplay() {
-  let currentTimeMs;
+startBtn.addEventListener('click', startTimer);
+stopBtn.addEventListener('click', stopTimer);
+resetBtn.addEventListener('click', resetTimer);
+addMaterialBtn.addEventListener('click', addMaterials);
+
+window.onload = () => {
+  loadState();
+  updateDisplay();
   if (running) {
-    currentTimeMs = storedElapsed + (Date.now() - startTime);
-  } else {
-    currentTimeMs = storedElapsed;
+    startTimer();
   }
-  timeDisplay.textContent = formatTime(currentTimeMs);
-  const rate = parseFloat(rateInput.value) || 0;
-  const hours = currentTimeMs / 3600000;
-  const workCost = hours * rate;
-  workCostDisplay.textContent = workCost.toFixed(2);
-  materialsCostDisplay.textContent = materialsTotal.toFixed(2);
-  const totalCost = workCost + materialsTotal;
-  totalCostDisplay.textContent = totalCost.toFixed(2);
-  animateValueChange(timeDisplay);
-  animateValueChange(workCostDisplay);
-  animateValueChange(materialsCostDisplay);
-  animateValueChange(totalCostDisplay);
-}
-
-function animateValueChange(element) {
-  if (!element) return;
-  element.style.opacity = '0.5';
-  setTimeout(() => {
-    element.style.opacity = '1';
-  }, 100);
-}
+};
