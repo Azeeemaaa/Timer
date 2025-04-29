@@ -2,6 +2,9 @@ let startButton = document.getElementById('start');
 let stopButton = document.getElementById('stop');
 let timeDisplay = document.getElementById('time');
 let amountDisplay = document.getElementById('amount');
+let materialInput = document.getElementById('materials');
+let materialCostDisplay = document.getElementById('materialCost');
+let totalDisplay = document.getElementById('total');
 let rateInput = document.getElementById('rate');
 
 let timer;
@@ -19,7 +22,13 @@ function formatTime(sec) {
 function calculateAmount() {
   let rate = parseFloat(rateInput.value) || 0;
   let hours = seconds / 3600;
-  return (rate * hours).toFixed(2);
+  return rate * hours;
+}
+
+function calculateTotal() {
+  let workAmount = calculateAmount();
+  let materials = parseFloat(materialInput.value) || 0;
+  return workAmount + materials;
 }
 
 startButton.addEventListener('click', function() {
@@ -27,7 +36,14 @@ startButton.addEventListener('click', function() {
     timer = setInterval(() => {
       seconds++;
       timeDisplay.textContent = formatTime(seconds);
-      amountDisplay.textContent = calculateAmount();
+
+      let workAmount = calculateAmount();
+      let materials = parseFloat(materialInput.value) || 0;
+      let total = workAmount + materials;
+
+      amountDisplay.textContent = workAmount.toFixed(2);
+      materialCostDisplay.textContent = materials.toFixed(2);
+      totalDisplay.textContent = total.toFixed(2);
     }, 1000);
   }
 });
