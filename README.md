@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto;">
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -7,6 +6,8 @@
 </head>
 <body>
   <h1>Таймер для расчёта оплаты</h1>
+
+<img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto;">
 
   <form>
     <label>Почасовая ставка ($):</label>
