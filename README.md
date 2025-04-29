@@ -25,7 +25,6 @@
       display: block;
       width: 120px;
       height: 120px;
-      border-radius: 10%;
       object-fit: cover;
       margin: 20px auto;
       background: #f0f0f0;
