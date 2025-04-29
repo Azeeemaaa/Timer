@@ -6,8 +6,8 @@
 </head>
 <body>
   <h1>Таймер для расчёта оплаты</h1>
-
-  <img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto; display: block; margin: 20px auto;">
+  
+  <img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto; display: block; margin: 10px auto;">
 
   <form>
     <!-- 1. Почасовая ставка -->
@@ -31,6 +31,15 @@
   <p>Сумма за работу: $<span id="amount">0.00</span></p>
   <p>Стоимость материалов: $<span id="materialCost">0.00</span></p>
   <h2>Итоговая сумма: $<span id="total">0.00</span></h2>
+
+<style>
+  /* ... (твои существующие стили) ... */
+
+  /* Добавляем плавную анимацию для цифр */
+  span, p, h2 {
+    transition: all 0.4s ease-in-out;
+  }
+</style>
 
   <script src="script.js"></script>
 </body>
