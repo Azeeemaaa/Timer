@@ -103,7 +103,7 @@
 <div class="container">
   <h1>Таймер оплаты</h1>
 
-  <img src="user.jpg" alt="Фото пользователя" class="user-photo">
+  <img src="myphoto.jpg" alt="Фото пользователя" class="user-photo">
 
   <div class="input-field">
     <label for="rate">Почасовая ставка ($/час):</label><br>
