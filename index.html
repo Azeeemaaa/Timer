@@ -84,7 +84,7 @@
   <h1>Таймер оплаты</h1>
 
   <!-- Фото -->
-  <img src="user.jpg" alt="Фото пользователя" class="user-photo">
+  <img src="myphoto.jpg" alt="Фото пользователя" class="user-photo">
 
   <!-- Ввод ставки -->
   <div class="input-field">
