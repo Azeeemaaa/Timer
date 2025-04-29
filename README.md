@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Таймер оплаты</title>
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.png" type="image/png">
   <style>
     body {
       background: #fff;
@@ -23,108 +23,98 @@
     }
     .user-photo {
       display: block;
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 10px auto;
+      margin: 20px auto;
+      background: #f0f0f0;
     }
     .input-field, .materials-input {
       margin: 10px 0;
       text-align: left;
     }
     label {
-      font-weight: 500;
-      margin-right: 10px;
+      font-weight: 600;
     }
     input[type="number"] {
-      padding: 5px 10px;
-      font-size: 16px;
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      box-sizing: border-box;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    .timer-controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin: 10px 0;
-    }
-    .materials-input {
+    .timer-controls, .materials-input {
       display: flex;
       gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
-    }
-    .materials-input label {
-      margin-right: 0;
+      margin-bottom: 10px;
     }
     button {
-      background: #2196F3;
-      color: #fff;
+      background: #007BFF;
+      color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 10px;
+      border-radius: 5px;
       font-size: 16px;
-      border-radius: 4px;
       cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
     }
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    button:hover {
+      background: #0056b3;
     }
-    button:hover:enabled {
-      background: #1976D2;
-    }
-    .output {
+    p, h2 {
       text-align: center;
-      margin: 10px 0;
-    }
-    .output p {
       margin: 5px 0;
-      font-size: 16px;
-    }
-    #timeDisplay {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .value-display {
       transition: opacity 0.3s ease;
     }
     @media (max-width: 600px) {
       .timer-controls, .materials-input {
         flex-direction: column;
-        align-items: stretch;
-      }
-      .timer-controls button, .materials-input input, .materials-input button {
-        width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Таймер оплаты</h1>
-    <img src="user.jpg" alt="Фото пользователя" class="user-photo">
-    <div class="input-field">
-      <label for="rate">Почасовая ставка:</label>
-      <input type="number" id="rate" placeholder="руб./час">
-    </div>
-    <div class="timer-controls">
-      <button id="startBtn">Старт</button>
-      <button id="stopBtn" disabled>Стоп</button>
-      <button id="resetBtn">Сброс</button>
-    </div>
-    <div class="materials-input">
-      <label for="materialCost">Стоимость материалов:</label>
-      <input type="number" id="materialCost" placeholder="руб.">
-      <button id="addMaterialBtn">Добавить материалы</button>
-    </div>
-    <div class="output">
-      <p>Время: <span id="timeDisplay" class="value-display">00:00:00</span></p>
-      <p>Стоимость работы: <span id="workCost" class="value-display">0.00</span> дол.</p>
-      <p>Стоимость материалов: <span id="materialsCost" class="value-display">0.00</span> дод.</p>
-      <p><strong>Итого:</strong> <span id="totalCost" class="value-display">0.00</span> дол.</p>
-    </div>
+
+<div class="container">
+  <h1>Таймер оплаты</h1>
+
+  <!-- Фото -->
+  <img src="user.jpg" alt="Фото пользователя" class="user-photo">
+
+  <!-- Ввод ставки -->
+  <div class="input-field">
+    <label for="rate">Почасовая ставка ($/час):</label><br>
+    <input type="number" id="rate" placeholder="Например, 60">
   </div>
-  <script src="script.js"></script>
+
+  <!-- Кнопки управления -->
+  <div class="timer-controls">
+    <button id="startBtn">Старт</button>
+    <button id="stopBtn" disabled>Стоп</button>
+    <button id="resetBtn">Сброс</button>
+  </div>
+
+  <!-- Ввод стоимости материалов -->
+  <div class="materials-input">
+    <label for="materialCost">Стоимость материалов ($):</label><br>
+    <input type="number" id="materialCost" placeholder="Например, 50">
+    <button id="addMaterialBtn">Добавить стоимость материалов</button>
+  </div>
+
+  <!-- Отображение результата -->
+  <div class="output">
+    <p>Время: <span id="timeDisplay">00:00:00</span></p>
+    <p>Стоимость работы: $<span id="workCost">0.00</span></p>
+    <p>Стоимость материалов: $<span id="materialsCost">0.00</span></p>
+    <h2>Итого: $<span id="totalCost">0.00</span></h2>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
