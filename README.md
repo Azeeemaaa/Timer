@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto;">
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
