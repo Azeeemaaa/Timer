@@ -22,12 +22,13 @@
       margin: 10px 0;
     }
     .user-photo {
-      display: block;
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      margin: 20px auto;
-      background: #f0f0f0;
+  display: block;
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  margin: 20px auto;
+  background: #f0f0f0;
+  border-radius: 0; /* Обязательно убираем округление */
     }
     .input-field, .materials-input {
       margin: 10px 0;
