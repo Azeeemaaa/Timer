@@ -10,7 +10,8 @@ let totalDisplay = document.getElementById('total');
 let rateInput = document.getElementById('rate');
 
 let timer;
-let seconds = 0;
+let startTime = null;
+let elapsed = 0; // Прошедшее время в секундах
 let fixedMaterials = 0;
 let isRunning = false;
 
@@ -21,31 +22,36 @@ function formatTime(sec) {
   return [hrs, mins, secs].map(v => v < 10 ? "0" + v : v).join(":");
 }
 
-function calculateWorkAmount() {
+function calculateWorkAmount(seconds) {
   let rate = parseFloat(rateInput.value) || 0;
   let hours = seconds / 3600;
   return rate * hours;
 }
 
 function updateDisplay() {
-  let workAmount = calculateWorkAmount();
-  let total = workAmount + fixedMaterials;
+  let totalElapsed = elapsed;
 
-  timeDisplay.textContent = formatTime(seconds);
-  amountDisplay.textContent = workAmount.toFixed(2);
+  if (isRunning && startTime) {
+    totalElapsed += Math.floor((Date.now() - startTime) / 1000);
+  }
+
+  timeDisplay.textContent = formatTime(totalElapsed);
+  amountDisplay.textContent = calculateWorkAmount(totalElapsed).toFixed(2);
   materialCostDisplay.textContent = fixedMaterials.toFixed(2);
-  totalDisplay.textContent = total.toFixed(2);
+  totalDisplay.textContent = (calculateWorkAmount(totalElapsed) + fixedMaterials).toFixed(2);
 }
 
 function saveState() {
-  localStorage.setItem('seconds', seconds);
+  localStorage.setItem('startTime', startTime);
+  localStorage.setItem('elapsed', elapsed);
   localStorage.setItem('rate', rateInput.value);
   localStorage.setItem('materials', fixedMaterials);
   localStorage.setItem('isRunning', isRunning);
 }
 
 function loadState() {
-  seconds = parseInt(localStorage.getItem('seconds')) || 0;
+  startTime = localStorage.getItem('startTime') ? parseInt(localStorage.getItem('startTime')) : null;
+  elapsed = parseInt(localStorage.getItem('elapsed')) || 0;
   rateInput.value = localStorage.getItem('rate') || '';
   fixedMaterials = parseFloat(localStorage.getItem('materials')) || 0;
   isRunning = localStorage.getItem('isRunning') === 'true';
@@ -53,35 +59,54 @@ function loadState() {
   updateDisplay();
 
   if (isRunning) {
-    startTimer();
+    startRealTimer();
   }
 }
 
-function startTimer() {
+function startRealTimer() {
   if (!timer) {
     timer = setInterval(() => {
-      seconds++;
       updateDisplay();
       saveState();
     }, 1000);
   }
 }
 
-function stopTimer() {
+function stopRealTimer() {
   clearInterval(timer);
   timer = null;
 }
 
 startButton.addEventListener('click', function() {
-  isRunning = true;
-  startTimer();
-  saveState();
+  if (!isRunning) {
+    startTime = Date.now();
+    isRunning = true;
+    startRealTimer();
+    saveState();
+  }
 });
 
 stopButton.addEventListener('click', function() {
+  if (isRunning && startTime) {
+    elapsed += Math.floor((Date.now() - startTime) / 1000);
+    startTime = null;
+    isRunning = false;
+    stopRealTimer();
+    saveState();
+    updateDisplay();
+  }
+});
+
+resetButton.addEventListener('click', function() {
+  stopRealTimer();
+  startTime = null;
+  elapsed = 0;
+  fixedMaterials = 0;
   isRunning = false;
-  stopTimer();
-  saveState();
+  rateInput.value = '';
+  materialInput.value = '';
+  localStorage.clear();
+  updateDisplay();
 });
 
 addMaterialsButton.addEventListener('click', function() {
@@ -89,17 +114,6 @@ addMaterialsButton.addEventListener('click', function() {
   fixedMaterials = inputMaterials;
   updateDisplay();
   saveState();
-});
-
-resetButton.addEventListener('click', function() {
-  stopTimer();
-  seconds = 0;
-  fixedMaterials = 0;
-  rateInput.value = '';
-  materialInput.value = '';
-  isRunning = false;
-  localStorage.clear();
-  updateDisplay();
 });
 
 window.onload = function() {
