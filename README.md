@@ -7,7 +7,7 @@
 <body>
   <h1>Таймер для расчёта оплаты</h1>
   
-  <img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto; display: block; margin: 10px auto;">
+  <img src="myphoto.jpg" alt="Моя фотография" style="max-width: 300px; height: auto; display: block; margin: 20px auto;">
 
   <form>
     <!-- 1. Почасовая ставка -->
