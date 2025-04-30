@@ -116,7 +116,7 @@
     <div class="materials-input">
       <label for="materialCost">Стоимость материалов ($):</label><br>
       <input type="number" id="materialCost" placeholder="Например, 50">
-      <button id="addMaterialBtn">Добавить стоимость материалов</button>
+      <button id="addMaterialBtn">Добавить</button>
     </div>
 
     <div class="output">
