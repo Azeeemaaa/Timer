@@ -64,9 +64,9 @@
 
     button {
       display: block;
-      width: 33%;
-      min-width: 100px;
-      max-width: 200px;
+      width: 25%;
+      min-width: 80px;
+      max-width: 160px;
       padding: 10px;
       margin: 5px auto;
       background: #007BFF;
